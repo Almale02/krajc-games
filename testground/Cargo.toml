@@ -1,0 +1,15 @@
+[package]
+name = "testground"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+stabby = { version = "36.1.1", features = ["libloading"] }
+krajc = { path = "../../krajc-engine/krajc/"}
+
+[build-dependencies]
+dirs-next = "2.0"
+
+[lib]
+name = "testground"
+crate-type = ["cdylib"]
