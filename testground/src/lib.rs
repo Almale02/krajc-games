@@ -6,7 +6,8 @@ use krajc::{
         schedule_manager::{
             runtime_schedule::*,
             system_params::{
-                system_local::Local, system_param::FunctionSystem, system_resource::Res,
+                system_engine::UnsafeEngineAccess, system_local::Local,
+                system_param::FunctionSystem, system_resource::Res,
             },
         },
         target_fps::TargetFps,
@@ -35,10 +36,6 @@ extern "C" fn register_systems(
         .register(FunctionSystem::new_with_name(system, "custom_system"));
 }
 #[system_fn]
-fn system(mut local: Local<i32>) {
-    *local += 1;
-    println!("local was: {}", *local);
-    dbg!(unsafe { ENGINE.addr });
-    let engine = unsafe { ENGINE.get() };
+fn system(mut engine: UnsafeEngineAccess) {
     engine.test += 2;
 }
