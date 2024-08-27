@@ -10,11 +10,11 @@ use krajc::{
                 system_param::FunctionSystem, system_resource::Res,
             },
         },
-        target_fps::TargetFps,
         EngineRuntime,
     },
     prelude::*,
-    typed_addr::TypedAddr,
+    rendering::managers::TargetFps,
+    typed_addr::{dupe, TypedAddr},
 };
 
 #[stabby::export]
@@ -37,5 +37,11 @@ extern "C" fn register_systems(
 }
 #[system_fn]
 fn system(mut engine: UnsafeEngineAccess) {
-    engine.test += 2;
+    println!(
+        "typeid from plugin: {:?}",
+        std::any::TypeId::of::<TargetFps>()
+    );
+    dupe(&engine)
+        .test_map
+        .insert(4, engine.test_map.get(&4).unwrap_or(&0) + 1);
 }
