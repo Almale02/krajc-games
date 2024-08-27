@@ -1,13 +1,19 @@
+static mut ENGINE: TypedAddr<EngineRuntime> = TypedAddr::default();
+
 use krajc::{
     abi::prelude::*,
     engine_runtime::{
         schedule_manager::{
             runtime_schedule::*,
-            system_params::{system_param::FunctionSystem, system_resource::Res},
+            system_params::{
+                system_local::Local, system_param::FunctionSystem, system_resource::Res,
+            },
         },
         target_fps::TargetFps,
+        EngineRuntime,
     },
     prelude::*,
+    typed_addr::TypedAddr,
 };
 
 #[stabby::export]
@@ -15,12 +21,24 @@ use krajc::{
 pub extern "C" fn get_plugin() -> SystemPlugin {
     SystemPlugin { register_systems }
 }
-extern "C" fn register_systems(reg: SystemPluginRegister) {
+extern "C" fn register_systems(
+    engine: TypedAddr<EngineRuntime>,
+    reg: SystemPluginRegister,
+    leak: TypedAddr<u32>,
+) {
+    dump_memory(engine.get());
+    println!("leak was: {}", leak.get());
+    *leak.get() += 1;
+    println!("engine address in plugin is {}", engine.addr);
+    unsafe { ENGINE = engine };
     reg.start_register::<RuntimeUpdateSchedule>()
         .register(FunctionSystem::new_with_name(system, "custom_system"));
 }
 #[system_fn]
-fn system(mut fps: Res<TargetFps>) {
-    dbg!("aaaaaa");
-    fps.0 += 15.;
+fn system(mut local: Local<i32>) {
+    *local += 1;
+    println!("local was: {}", *local);
+    dbg!(unsafe { ENGINE.addr });
+    let engine = unsafe { ENGINE.get() };
+    engine.test += 2;
 }
