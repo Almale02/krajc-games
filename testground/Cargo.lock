@@ -1708,6 +1708,7 @@ dependencies = [
  "queues",
  "quote",
  "rapier3d",
+ "shared-lib",
  "spin_sleep",
  "stabby",
  "strum",
@@ -3037,6 +3038,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1_smol"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbfa15b3dddfee50a0fff136974b3e1bde555604ba463834a7eb7deb6417705d"
+
+[[package]]
 name = "sha2-const-stable"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3050,6 +3057,10 @@ checksum = "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
 dependencies = [
  "lazy_static",
 ]
+
+[[package]]
+name = "shared-lib"
+version = "0.1.0"
 
 [[package]]
 name = "shlex"
@@ -3725,6 +3736,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 dependencies = [
  "getrandom 0.2.15",
+ "sha1_smol",
 ]
 
 [[package]]
